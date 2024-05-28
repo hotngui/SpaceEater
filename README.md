@@ -14,6 +14,5 @@ If everything is not working on the device as expected there is a chance you may
 
 <br>
 If you want to support my work, you can by me a coke zero... <br><br>
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F4UHD6J)
 
-
+<a href='https://ko-fi.com/F1F4UHD6J' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://ko-fi.com/img/githubbutton_sm.svg' border='0' alt='Buy Me a Coke Zero at ko-fi.com' /></a>
