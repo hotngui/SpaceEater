@@ -10,7 +10,7 @@ This is an app you can build and install on an iOS device to help _**eat**_ up d
 If everything is not working on the device as expected there is a chance you may brick it. I've not seen that happen, but please be forewarned. 
 <br>
 
-<img src='/Images/Screenshot1.png' border='0' alt='A screenshot of the primary screen of the app' />
+<img src='/Images/Screenshot1.png' width='250' border='0' alt='A screenshot of the primary screen of the app' />
 
 <br>
 If you want to support my work, you can by me a coke zero... <br><br>
