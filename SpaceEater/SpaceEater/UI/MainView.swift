@@ -12,6 +12,7 @@ struct MainView: View {
     @State private var numberOfFiles: Int = FileGenerator.defaultNumberOfFiles
     @State private var sizeOfFilesInBytes: Double = FileGenerator.defaultSizeOfFileInBytes
 
+    @State private var dummyRefresher = false
     @State private var isGeneratingFiles = false
     @State private var isDeletingFiles = false
     @State private var isBusy = false
@@ -152,6 +153,10 @@ struct MainView: View {
                         .controlSize(.large)
                         .tint(.accentColor)
                 }
+            }
+            .id(dummyRefresher)
+            .refreshable {
+                dummyRefresher.toggle()
             }
             
             // When we use the initializer variant of the `Stepper` view that we are using we run into issues
