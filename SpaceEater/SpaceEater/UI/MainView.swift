@@ -6,6 +6,8 @@
 import SwiftUI
 
 struct MainView: View {
+    @Environment(\.scenePhase) var scenePhase
+    
     @AppStorage("numberOfFiles") var numberOfFilesUD = FileGenerator.defaultNumberOfFiles
     @AppStorage("sizeOfFilesInBytes") var sizeOfFilesInBytesUD = FileGenerator.defaultSizeOfFileInBytes
 
@@ -155,8 +157,17 @@ struct MainView: View {
                 }
             }
             .id(dummyRefresher)
+            
+            // Useful pull-to-refresh if you expect disk space to be consumed by another app running in the background
             .refreshable {
                 dummyRefresher.toggle()
+            }
+            
+            // Useful when going back-and-forth between apps..
+            .onChange(of: scenePhase) { newPhase in
+                if newPhase == .active {
+                    dummyRefresher.toggle()
+                }
             }
             
             // When we use the initializer variant of the `Stepper` view that we are using we run into issues
