@@ -44,73 +44,27 @@ struct MainView: View {
                             step: FileGenerator.defaultNumberOfFiles)
 
                     HStack {
-                        Button("Delete One File", role: .destructive) {
-                            isBusy.toggle()
-                            
-                            Task {
-                                try! await generator.removeFiles(1)
-                                isBusy.toggle()
-                            }
-                        }
-                        
+                        deleteOneFileButton()
                         Spacer()
-                        
-                        Button("Delete All Files", role: .destructive) {
-                            isDeletingFiles.toggle()
-                        }
-                        .alert("Delete All Files", isPresented: $isDeletingFiles) {
-                            Button("DELETE", role: .destructive) {
-                                isBusy.toggle()
-                                
-                                Task {
-                                    try! await generator.removeFiles()
-                                    isBusy.toggle()
-                                }
-                            }
-                        } message: {
-                            Text("Do you really want to delete all the files created by this tool?")
-                        }
-
+                        deleteAllFilesButton()
                         Spacer()
-                        
-                        Button("Generate Files", role: .none) {
-                            isGeneratingFiles.toggle()
-                            isBusy.toggle()
-                            
-                            Task {
-                                do {
-                                    try await generator.generate(numberOfFiles: numberOfFiles, sizeOfFilesInBytes: sizeOfFilesInBytes)
-                                    isGeneratingFiles.toggle()
-                                    isBusy.toggle()
-                                } catch {
-                                    errorMessage = error.localizedDescription
-                                    isBusy.toggle()
-                                    isGeneratingFiles.toggle()
-                                    isShowingError.toggle()
-                                }
-                            }
-                            
-                        }
-                        .alert(isPresented: $isShowingError) {
-                            Alert(
-                                title: Text("File Generation"),
-                                message: Text("\(errorMessage ?? "")")
-                            )
-                        }
+                        generateFilesButton()
                     }
-                    .buttonStyle(.borderedProminent)
                 }
                 
-                Section("Eaten") {
+                Section {
                     HStack {
                         Text("Size:")
                         Spacer()
                         Text("\(formatter.string(from: convert(generator.usedDisk(), from: .bytes, to: .gigabytes)))")
                             .monospaced()
                     }
+                } header : {
+                    Text("Eaten")
+                        .padding(.top, -12)
                 }
-                
-                Section("Device Disk Space") {
+
+                Section {
                     HStack {
                         Text("Total:")
                         Spacer()
@@ -123,9 +77,12 @@ struct MainView: View {
                         Text("\(formatter.string(from: convert(Double(UIDevice.current.usedDiskSpaceInBytes), from: .bytes, to: .gigabytes)))")
                             .monospaced()
                     }
+                } header : {
+                    Text("Device Disk Space")
+                        .padding(.top, -12)
                 }
 
-                Section("Device Available Capacity") {
+                Section {
                     HStack {
                         Text("For Usage:")
                         Spacer()
@@ -144,6 +101,9 @@ struct MainView: View {
                         Text("\(formatter.string(from: convert(Double(UIDevice.current.availableCapacityForOpportunisticUsage), from: .bytes, to: .gigabytes)))")
                             .monospaced()
                     }
+                } header : {
+                    Text("Device Available Capacity")
+                        .padding(.top, -12)
                 }
             }
             .navigationTitle("Spacer Eater")
@@ -182,6 +142,68 @@ struct MainView: View {
             .onChange(of: numberOfFiles) { value in
                 numberOfFilesUD = value
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func deleteOneFileButton() -> some View {
+        Button("Delete One File", role: .destructive) {
+            isBusy.toggle()
+            
+            Task {
+                try! await generator.removeFiles(1)
+                isBusy.toggle()
+            }
+        }
+        .buttonStyle(.borderedProminent)
+    }
+
+    @ViewBuilder
+    private func deleteAllFilesButton() -> some View {
+        Button("Delete All Files", role: .destructive) {
+            isDeletingFiles.toggle()
+        }
+        .buttonStyle(.borderedProminent)
+        .alert("Delete All Files", isPresented: $isDeletingFiles) {
+            Button("DELETE", role: .destructive) {
+                isBusy.toggle()
+                
+                Task {
+                    try! await generator.removeFiles()
+                    isBusy.toggle()
+                }
+            }
+        } message: {
+            Text("Do you really want to delete all the files created by this tool?")
+        }
+    }
+
+    @ViewBuilder
+    private func generateFilesButton() -> some View {
+        Button("Generate Files", role: .none) {
+            isGeneratingFiles.toggle()
+            isBusy.toggle()
+            
+            Task {
+                do {
+                    try await generator.generate(numberOfFiles: numberOfFiles, sizeOfFilesInBytes: sizeOfFilesInBytes)
+                    isGeneratingFiles.toggle()
+                    isBusy.toggle()
+                } catch {
+                    errorMessage = error.localizedDescription
+                    isBusy.toggle()
+                    isGeneratingFiles.toggle()
+                    isShowingError.toggle()
+                }
+            }
+            
+        }
+        .buttonStyle(.borderedProminent)
+        .alert(isPresented: $isShowingError) {
+            Alert(
+                title: Text("File Generation"),
+                message: Text("\(errorMessage ?? "")")
+            )
         }
     }
 
